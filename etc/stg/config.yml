@@ -1,0 +1,6 @@
+mysql:
+  user: root
+  password: password
+option:
+  domain: example.com
+  mail: example@example.com

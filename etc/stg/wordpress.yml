@@ -1,0 +1,23 @@
+version: '3'
+services:
+  APP_NAME:
+    image: wordpress
+    restart: always
+    container_name: APP_NAME
+    expose:
+      - '80'
+    environment:
+      VIRTUAL_HOST: APP_NAME.DOMAIN
+      LETSENCRYPT_HOST: APP_NAME.DOMAIN
+      LETSENCRYPT_EMAIL: MAIL
+      WORDPRESS_DB_HOST: 172.18.0.1:33065
+      WORDPRESS_DB_USER: native
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_DB_NAME: APP_NAME
+    volumes:
+      - .:/var/www/html
+
+networks:
+  default:
+    external:
+      name: production

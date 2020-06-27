@@ -1,0 +1,19 @@
+version: '3'
+services:
+  APP_NAME:
+    image: php:7-apache
+    restart: always
+    container_name: APP_NAME
+    expose:
+      - '80'
+    environment:
+      VIRTUAL_HOST: APP_NAME.DOMAIN
+      LETSENCRYPT_HOST: APP_NAME.DOMAIN
+      LETSENCRYPT_EMAIL: MAIL
+    volumes:
+      - .:/var/www/html
+
+networks:
+  default:
+    external:
+      name: production

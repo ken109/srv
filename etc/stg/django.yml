@@ -1,0 +1,27 @@
+version: '3'
+services:
+  APP_NAME:
+    image: ken109/django
+    restart: always
+    container_name: APP_NAME
+    expose:
+      - '80'
+    environment:
+      VIRTUAL_HOST: APP_NAME.DOMAIN
+      LETSENCRYPT_HOST: APP_NAME.DOMAIN
+      LETSENCRYPT_EMAIL: MAIL
+      DJANGO_NAME: APP_NAME
+      DJANGO_DB_HOST: 172.18.0.1
+      DJANGO_DB_USER: native
+      DJANGO_DB_PASSWORD: password
+      DJANGO_DB_NAME: APP_NAME
+      CONDA_MODULE:
+      PIP_MODULE:
+      INSTALLED_APPS:
+    volumes:
+      - .:/usr/share/nginx/html
+
+networks:
+  default:
+    external:
+      name: production
