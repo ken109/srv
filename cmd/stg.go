@@ -29,7 +29,7 @@ func staging(framework string, project string) {
 	deploy(project)
 	color.Green("Copying docker-compose.yml...")
 	util.Cd(home + "/staging/" + project)
-	copyCompose(home+"/.srv/"+framework+".yml", project)
+	copyCompose(brewPrefix+"/etc/srv/"+framework+".yml", project)
 
 	color.Green("Creating database...")
 	createDB(project, config.Mysql.User, config.Mysql.Password)

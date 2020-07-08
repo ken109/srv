@@ -3,16 +3,17 @@ package cmd
 import (
 	"fmt"
 	"github.com/ken109/srv/util"
+	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"os"
 
-	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 )
 
 var cfgFile string
 var config util.Config
 var home string
+var brewPrefix = util.GetOutput("brew", "--prefix")
 
 var rootCmd = &cobra.Command{
 	Use:   "srv",
@@ -32,22 +33,17 @@ func Execute() {
 func init() {
 	initConfig()
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.srv/config.yml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "",
+		fmt.Sprintf("config file (default is %s)", brewPrefix+"/etc/srv/config.yaml"))
+
+	home, _ = homedir.Dir()
 }
 
 func initConfig() {
 	if cfgFile != "" {
 		viper.SetConfigFile(cfgFile)
 	} else {
-		var err error
-		home, err = homedir.Dir()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-
-		viper.AddConfigPath(home + "/.srv")
-		viper.SetConfigName("config")
+		viper.SetConfigFile(brewPrefix + "/etc/srv/config.yml")
 	}
 
 	viper.AutomaticEnv()
