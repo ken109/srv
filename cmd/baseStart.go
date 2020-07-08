@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/fatih/color"
-	"github.com/ken109/stg/util"
+	"github.com/ken109/srv/util"
 	"github.com/spf13/cobra"
 	"os/exec"
 )
