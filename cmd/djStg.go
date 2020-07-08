@@ -5,10 +5,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var djStartCmd = &cobra.Command{
+var djStgCmd = &cobra.Command{
 	Use:     "dj [project name]",
 	Aliases: []string{"django"},
-	Short:   "django: start",
+	Short:   "django: staging",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			return errors.New("requires a project name argument")
@@ -16,10 +16,10 @@ var djStartCmd = &cobra.Command{
 		return nil
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		start("django", args[0])
+		staging("django", args[0])
 	},
 }
 
 func init() {
-	startCmd.AddCommand(djStartCmd)
+	stgCmd.AddCommand(djStgCmd)
 }

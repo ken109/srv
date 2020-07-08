@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"github.com/fatih/color"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/ken109/stg/util"
 	"github.com/spf13/cobra"
 	"io/ioutil"
 	"os"
@@ -11,32 +12,51 @@ import (
 	"strings"
 )
 
-var startCmd = &cobra.Command{
-	Use:   "start",
-	Short: "Start environment",
+var stgCmd = &cobra.Command{
+	Use:   "stg",
+	Short: "Staging environment",
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(startCmd)
+	rootCmd.AddCommand(stgCmd)
 }
 
-func start(framework string, project string) {
-	var host string
+func staging(framework string, project string) {
+	checkDir(project)
+	deploy(project)
 	color.Green("Copying docker-compose.yml...")
-	host = copyCompose(home+"/..stg/"+framework+".yml", project)
+	copyCompose(home+"/.stg/"+framework+".yml", project)
+
 	color.Green("Creating database...")
 	createDB(project, config.Mysql.User, config.Mysql.Password)
 
 	color.Green("Starting...")
 	composeUp()
-	color.Blue("URL: http://" + host)
+
 	color.Green("Completed.")
 }
 
-func copyCompose(path string, project string) string {
+func checkDir(project string) {
+	if util.Exists(home + "/staging/" + project) {
+		color.Green("Deleting old project...")
+		util.Remove(home + "/staging/" + project)
+	}
+}
+
+func deploy(project string) {
+	color.Green("Deploying...")
+	util.Mkdir(home + "/staging/" + project)
+	if err := exec.Command("tar", "xf", home+"/.tmp/"+project+".tar.gz", "-C", home+"/staging"+project).Run(); err != nil {
+		color.Red("Could not deploy.")
+		os.Exit(1)
+	}
+	util.Remove(home + "/.tmp/" + project + ".tar.gz")
+}
+
+func copyCompose(path string, project string) {
 	ft, err := os.Open(path)
 	if err != nil {
 		color.Red("Could not read " + path)
@@ -45,10 +65,8 @@ func copyCompose(path string, project string) string {
 	defer ft.Close()
 	b, _ := ioutil.ReadAll(ft)
 	var compose = string(b)
-	var host string
 	compose = strings.ReplaceAll(compose, "APP_NAME", project)
 	compose = strings.ReplaceAll(compose, "HOST_NAME", project)
-	host = project
 	fc, err := os.Create("./docker-compose.yml")
 	if err != nil {
 		color.Red("Could not read template")
@@ -56,8 +74,6 @@ func copyCompose(path string, project string) string {
 	}
 	defer fc.Close()
 	fc.WriteString(compose)
-
-	return host
 }
 
 func createDB(project string, user string, password string) {
@@ -76,7 +92,7 @@ func createDB(project string, user string, password string) {
 func composeUp() {
 	err := exec.Command("docker-compose", "up", "-d", "--remove-orphans").Run()
 	if err != nil {
-		color.Red("Could not start docker-compose")
+		color.Red("Could not staging docker-compose")
 		os.Exit(1)
 	}
 }

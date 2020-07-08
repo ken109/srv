@@ -5,10 +5,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var p5StartCmd = &cobra.Command{
-	Use:     "p5 [project name]",
-	Aliases: []string{"php5"},
-	Short:   "php5: start",
+var laStgCmd = &cobra.Command{
+	Use:     "la [project name]",
+	Aliases: []string{"laravel"},
+	Short:   "laravel: staging",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			return errors.New("requires a project name argument")
@@ -16,10 +16,10 @@ var p5StartCmd = &cobra.Command{
 		return nil
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		start("php5", args[0])
+		staging("laravel", args[0])
 	},
 }
 
 func init() {
-	startCmd.AddCommand(p5StartCmd)
+	stgCmd.AddCommand(laStgCmd)
 }

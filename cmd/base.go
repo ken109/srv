@@ -6,7 +6,7 @@ import (
 
 var baseCmd = &cobra.Command{
 	Use:   "base",
-	Short: "base: start, stop",
+	Short: "base: staging, stop",
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},

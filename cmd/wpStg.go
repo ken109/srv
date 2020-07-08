@@ -5,10 +5,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var wpStartCmd = &cobra.Command{
+var wpStgCmd = &cobra.Command{
 	Use:     "wp [project name]",
 	Aliases: []string{"wordpress"},
-	Short:   "wordpress: start",
+	Short:   "wordpress: staging",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			return errors.New("requires a project name argument")
@@ -16,10 +16,10 @@ var wpStartCmd = &cobra.Command{
 		return nil
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		start("wordpress", args[0])
+		staging("wordpress", args[0])
 	},
 }
 
 func init() {
-	startCmd.AddCommand(wpStartCmd)
+	stgCmd.AddCommand(wpStgCmd)
 }

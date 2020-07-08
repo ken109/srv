@@ -8,14 +8,14 @@ import (
 )
 
 var baseStartCmd = &cobra.Command{
-	Use:   "start",
-	Short: "base: start",
+	Use:   "staging",
+	Short: "base: staging",
 	Run: func(cmd *cobra.Command, args []string) {
 		var dir = util.Pwd()
 		util.Cd(home + "/..stg/base")
 		color.Green("Starting...")
 		if err := exec.Command("docker-compose", "up", "-d", "--remove-orphans").Run(); err != nil {
-			color.Red("Failed to start.")
+			color.Red("Failed to staging.")
 		} else {
 			color.Green("Successfully started.")
 		}
