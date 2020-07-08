@@ -34,13 +34,19 @@ func Pwd() string {
 }
 
 func Exists(name string) bool {
-	_, err := os.Stat(name)
-	return err == nil
+	f, err := os.Stat(name)
+	return !(os.IsNotExist(err) || f.IsDir())
 }
 
 func Remove(name string) {
 	if err := os.Remove(name); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
+	}
+}
+
+func Mkdir(name string) {
+	if err := os.Mkdir(name, 0755); err != nil {
+		fmt.Println(err)
 	}
 }

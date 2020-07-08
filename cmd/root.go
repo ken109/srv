@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/ken109/stg/util"
+	"github.com/ken109/srv/util"
 	"github.com/spf13/cobra"
 	"os"
 
@@ -15,8 +15,8 @@ var config util.Config
 var home string
 
 var rootCmd = &cobra.Command{
-	Use:   "stg",
-	Short: "Build stg environment",
+	Use:   "srv",
+	Short: "Build staging environment",
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
@@ -32,7 +32,7 @@ func Execute() {
 func init() {
 	initConfig()
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.stg/config.yml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.srv/config.yml)")
 }
 
 func initConfig() {
@@ -46,7 +46,7 @@ func initConfig() {
 			os.Exit(1)
 		}
 
-		viper.AddConfigPath(home + "/.stg")
+		viper.AddConfigPath(home + "/.srv")
 		viper.SetConfigName("config")
 	}
 
