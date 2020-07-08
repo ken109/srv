@@ -16,7 +16,7 @@ var home string
 
 var rootCmd = &cobra.Command{
 	Use:   "stg",
-	Short: "Build stg environment",
+	Short: "Build staging environment",
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},

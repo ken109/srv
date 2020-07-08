@@ -12,7 +12,7 @@ var baseStopCmd = &cobra.Command{
 	Short: "base: stop",
 	Run: func(cmd *cobra.Command, args []string) {
 		var dir = util.Pwd()
-		util.Cd(home + "/.stg/base")
+		util.Cd(home + "/..stg/base")
 		color.Green("Stopping...")
 		if err := exec.Command("docker-compose", "down").Run(); err != nil {
 			color.Red("Failed to stop.")
