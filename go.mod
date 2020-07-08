@@ -1,4 +1,4 @@
-module github.com/ken109/stg
+module github.com/ken109/srv
 
 go 1.14
 

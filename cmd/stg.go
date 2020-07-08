@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"github.com/fatih/color"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/ken109/stg/util"
+	"github.com/ken109/srv/util"
 	"github.com/spf13/cobra"
 	"io/ioutil"
 	"os"
@@ -28,7 +28,8 @@ func staging(framework string, project string) {
 	checkDir(project)
 	deploy(project)
 	color.Green("Copying docker-compose.yml...")
-	copyCompose(home+"/.stg/"+framework+".yml", project)
+	util.Cd(home + "/staging/" + project)
+	copyCompose(home+"/.srv/"+framework+".yml", project)
 
 	color.Green("Creating database...")
 	createDB(project, config.Mysql.User, config.Mysql.Password)
@@ -49,7 +50,7 @@ func checkDir(project string) {
 func deploy(project string) {
 	color.Green("Deploying...")
 	util.Mkdir(home + "/staging/" + project)
-	if err := exec.Command("tar", "xf", home+"/.tmp/"+project+".tar.gz", "-C", home+"/staging"+project).Run(); err != nil {
+	if err := exec.Command("tar", "xf", home+"/.tmp/"+project+".tar.gz", "-C", home+"/staging/"+project).Run(); err != nil {
 		color.Red("Could not deploy.")
 		os.Exit(1)
 	}

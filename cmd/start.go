@@ -25,7 +25,7 @@ func init() {
 func start(framework string, project string) {
 	emptyCheck()
 	color.Green("Copying docker-compose.yml...")
-	startCopyCompose(home+"/.stg/"+framework+".yml", project)
+	startCopyCompose(home+"/.srv/"+framework+".yml", project)
 	color.Green("Creating database...")
 	createDB(project, config.Mysql.User, config.Mysql.Password)
 
