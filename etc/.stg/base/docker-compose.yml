@@ -50,6 +50,13 @@ services:
       MYSQL_ROOT_PASSWORD: password
     restart: always
 
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - '6379:6379'
+    restart: always
+
 networks:
   default:
     external:
