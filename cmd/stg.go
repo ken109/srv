@@ -68,7 +68,7 @@ func copyCompose(path string, project string) {
 	var compose = string(b)
 	compose = strings.ReplaceAll(compose, "APP_NAME", project)
 	compose = strings.ReplaceAll(compose, "DOMAIN", config.Option.Domain)
-	compose = strings.ReplaceAll(compose, "MAIL", config.Option.Mail)
+	compose = strings.ReplaceAll(compose, "APP_MAIL", config.Option.Mail)
 	fc, err := os.Create("./docker-compose.yml")
 	if err != nil {
 		color.Red("Could not read template")
