@@ -34,7 +34,7 @@ var stopCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(stopCmd)
 
-	stopCmd.PersistentFlags().Bool("drop-db", false, "Share in the office")
+	stopCmd.PersistentFlags().Bool("drop-db", false, "データベース削除")
 }
 
 func GetProjectName() string {

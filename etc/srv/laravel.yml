@@ -16,6 +16,7 @@ services:
       LARAVEL_DB_USER: sha2
       LARAVEL_DB_PASSWORD: password
       LARAVEL_DB_NAME: APP_NAME
+      LARAVEL_DO_MIGRATION: "true"
     volumes:
       - .:/var/www/html
 
