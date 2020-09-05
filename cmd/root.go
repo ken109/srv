@@ -31,15 +31,14 @@ func Execute() {
 }
 
 func init() {
-	initConfig()
-
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "",
-		fmt.Sprintf("config file (default is %s)", brewPrefix+"/etc/srv/config.yaml"))
-
-	home, _ = homedir.Dir()
+	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "",
+		"config file (default is "+brewPrefix+"/etc/srv/config.yml)")
+	cobra.OnInitialize(initConfig)
 }
 
 func initConfig() {
+	home, _ = homedir.Dir()
+
 	if cfgFile != "" {
 		viper.SetConfigFile(cfgFile)
 	} else {
