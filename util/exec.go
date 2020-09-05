@@ -17,6 +17,18 @@ func GetOutput(name string, arg ...string) string {
 	return strings.ReplaceAll(string(out), "\n", "")
 }
 
+func TryCommand(name string, arg ...string) error {
+	cmd := exec.Command(name, arg...)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		return err
+	} else {
+		return nil
+	}
+}
+
 func Cd(dir string) {
 	if err := os.Chdir(dir); err != nil {
 		fmt.Println(err)

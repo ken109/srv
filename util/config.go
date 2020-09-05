@@ -5,4 +5,8 @@ type Config struct {
 		User     string
 		Password string
 	}
+	Option struct {
+		Domain string
+		Mail   string
+	}
 }
