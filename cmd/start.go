@@ -57,7 +57,8 @@ func startCopyCompose(path string, project string) {
 	b, _ := ioutil.ReadAll(ft)
 	var compose = string(b)
 	compose = strings.ReplaceAll(compose, "APP_NAME", project)
-	compose = strings.ReplaceAll(compose, "HOST_NAME", project)
+	compose = strings.ReplaceAll(compose, "DOMAIN", config.Option.Domain)
+	compose = strings.ReplaceAll(compose, "APP_MAIL", config.Option.Mail)
 	fc, err := os.Create("./docker-compose.yml")
 	if err != nil {
 		color.Red("Could not read template")

@@ -31,9 +31,9 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "",
-		"config file (default is "+brewPrefix+"/etc/srv/config.yml)")
-	cobra.OnInitialize(initConfig)
+	//rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "",
+	//	"config file (default is "+brewPrefix+"/etc/srv/config.yml)")
+	initConfig()
 }
 
 func initConfig() {
