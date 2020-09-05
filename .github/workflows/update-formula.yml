@@ -1,0 +1,50 @@
+name: Update Formura
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  update-formura:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+
+      - name: Get SHA256
+        id: get_sha256
+        run: |
+          wget https://github.com/ken109/srv/archive/${{ steps.get_version.outputs.VERSION }}.tar.gz
+          echo ::set-output name=SHA256::$(openssl dgst -r -SHA256 ${{ steps.get_version.outputs.VERSION }}.tar.gz | cut -d ' ' -f 1)
+      - name: Checkout Formura Repo
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          repository: ken109/homebrew-tap
+          path: formura
+
+      - name: Update Formura
+        run: |
+          sed s/+VIRSION+/${{ steps.get_version.outputs.VERSION }}/ ./formura/templates/srv.rb > ./formura/srv.rb
+          sed -i s/+SHA256+/${{ steps.get_sha256.outputs.SHA256 }}/ ./formura/srv.rb
+      - name: Setup Git
+        run: |
+          git config --global user.email "kensukekubo19@gmail.com"
+          git config --global user.name "Kensuke Kubo"
+        
+      - name: Commit Changes
+        run: |
+          cd formura
+          git add .
+          git commit -m 'Formura ${{ steps.get_version.outputs.VERSION }}'
+      
+      - name: Push changes
+        run: |
+          cd formura
+          git remote set-url origin https://ken109:${{ secrets.ACCESS_TOKEN }}@github.com/ken109/homebrew-tap.git
+          git push origin master
