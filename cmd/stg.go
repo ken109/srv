@@ -50,11 +50,11 @@ func checkDir(project string) {
 func deploy(project string) {
 	color.Green("Deploying...")
 	util.Mkdir(home + "/staging/" + project)
-	if err := exec.Command("tar", "xf", home+"/.tmp/"+project+".tar.gz", "-C", home+"/staging/"+project).Run(); err != nil {
+	if err := util.TryCommand("tar", "xf", "/tmp/srv-"+project+".tar.gz", "-C", home+"/staging/"+project); err != nil {
 		color.Red("Could not deploy.")
 		os.Exit(1)
 	}
-	util.Remove(home + "/.tmp/" + project + ".tar.gz")
+	util.Remove("/tmp/srv-" + project + ".tar.gz")
 }
 
 func copyCompose(path string, project string) {
@@ -67,7 +67,8 @@ func copyCompose(path string, project string) {
 	b, _ := ioutil.ReadAll(ft)
 	var compose = string(b)
 	compose = strings.ReplaceAll(compose, "APP_NAME", project)
-	compose = strings.ReplaceAll(compose, "HOST_NAME", project)
+	compose = strings.ReplaceAll(compose, "DOMAIN", config.Option.Domain)
+	compose = strings.ReplaceAll(compose, "MAIL", config.Option.Mail)
 	fc, err := os.Create("./docker-compose.yml")
 	if err != nil {
 		color.Red("Could not read template")
@@ -80,12 +81,13 @@ func copyCompose(path string, project string) {
 func createDB(project string, user string, password string) {
 	db, err := sql.Open("mysql", user+":"+password+"@tcp(127.0.0.1:3306)/")
 	if err != nil {
-		panic(err.Error())
+		color.Red("データベースに接続できませんでした")
+		os.Exit(1)
 	}
 	defer db.Close()
 	_, err = db.Exec("CREATE DATABASE IF NOT EXISTS `" + project + "`")
 	if err != nil {
-		color.Red("Could not create database")
+		color.Red("データベースを作成できませんでした。")
 		os.Exit(1)
 	}
 }
